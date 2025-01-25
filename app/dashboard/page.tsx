@@ -1,12 +1,12 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { DollarSign, Package, ShoppingBag, TrendingUp, Users } from "lucide-react";
 
 export default function DashboardPage() {
   return (
     <div className="flex min-h-screen flex-col">
+     
       <main className="flex-1 container py-6">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>
