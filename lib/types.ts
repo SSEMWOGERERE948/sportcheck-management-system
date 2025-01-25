@@ -22,17 +22,23 @@ export interface Sale {
   createdAt: Date;
 }
 
-export interface Product {
+interface Product {
   id: string;
   name: string;
   category: string;
-  company: Company;
-  price: number;
+  company: string;
   stock: number;
   minStock: number;
-  createdAt: Date;
+  price: number;
   lastRestocked: string;
+  createdAt: string;
+  status?: string;
+  clarification?: {
+    identifier: string;  // either color or size
+    quantity: number;
+  }[];
 }
+
 
 export interface Stock {
   id: string;

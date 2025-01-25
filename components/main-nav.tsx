@@ -3,65 +3,46 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { ShoppingBag, BarChart2, Package, DollarSign, Users, Settings } from "lucide-react";
+import { ShoppingBag, BarChart2, Package, DollarSign, Settings, X } from "lucide-react";
 
-export function MainNav() {
+export function MainNav({ onClose }: { onClose?: () => void }) {
   const pathname = usePathname();
 
   const routes = [
-    {
-      href: "/dashboard",
-      label: "Dashboard",
-      icon: BarChart2,
-      active: pathname === "/dashboard",
-    },
-    {
-      href: "/sales",
-      label: "Sales",
-      icon: ShoppingBag,
-      active: pathname === "/sales",
-    },
-    {
-      href: "/inventory",
-      label: "Inventory",
-      icon: Package,
-      active: pathname === "/inventory",
-    },
-    {
-      href: "/expenses",
-      label: "Expenses",
-      icon: DollarSign,
-      active: pathname === "/expenses",
-    },
-    {
-      href: "/customers",
-      label: "Customers",
-      icon: Users,
-      active: pathname === "/customers",
-    },
-    {
-      href: "/settings",
-      label: "Settings",
-      icon: Settings,
-      active: pathname === "/settings",
-    },
+    { href: "/dashboard", label: "Dashboard", icon: BarChart2, active: pathname === "/dashboard" },
+    { href: "/sales", label: "Sales", icon: ShoppingBag, active: pathname === "/sales" },
+    { href: "/inventory", label: "Inventory", icon: Package, active: pathname === "/inventory" },
+    { href: "/expenses", label: "Expenses", icon: DollarSign, active: pathname === "/expenses" },
+    { href: "/settings", label: "Settings", icon: Settings, active: pathname === "/settings" },
   ];
 
   return (
-    <nav className="flex items-center space-x-6">
-      {routes.map((route) => (
-        <Link
-          key={route.href}
-          href={route.href}
-          className={cn(
-            "flex items-center space-x-2 text-sm font-medium transition-colors hover:text-primary",
-            route.active ? "text-primary" : "text-muted-foreground"
-          )}
+    <nav className="w-64 h-full bg-white border-r relative">
+      {/* Close Button */}
+      {onClose && (
+        <button
+          className="absolute top-4 right-4 text-gray-600 hover:text-gray-900 md:hidden"
+          onClick={onClose}
         >
-          <route.icon className="h-4 w-4" />
-          <span>{route.label}</span>
-        </Link>
-      ))}
+          <X className="h-6 w-6" />
+        </button>
+      )}
+      <ul className="space-y-4 p-4">
+        {routes.map((route) => (
+          <li key={route.href}>
+            <Link
+              href={route.href}
+              className={cn(
+                "flex items-center space-x-2 text-sm font-medium text-gray-600 hover:text-primary",
+                route.active ? "text-primary" : ""
+              )}
+            >
+              <route.icon className="h-5 w-5" />
+              <span>{route.label}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </nav>
   );
 }

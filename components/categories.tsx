@@ -34,21 +34,23 @@ export const addCategory = async (name: string, company: string) => {
   }
 };
 
-export const getCategories = async (): Promise<Category[]> => {
-  try {
-    const categoriesRef = collection(db, 'categories');
-    const querySnapshot = await getDocs(categoriesRef);
-    
-    return querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-      createdAt: doc.data().createdAt.toDate(),
-    })) as Category[];
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-    throw error;
-  }
-};
+export const getCategories = async (company?: string): Promise<Category[]> => {
+    try {
+      const categoriesRef = collection(db, 'categories');
+      const q = company ? query(categoriesRef, where('company', '==', company)) : categoriesRef;
+      const querySnapshot = await getDocs(q);
+      
+      return querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt.toDate(),
+      })) as Category[];
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      throw error;
+    }
+  };
+  
 
 export const deleteCategory = async (categoryId: string) => {
   try {

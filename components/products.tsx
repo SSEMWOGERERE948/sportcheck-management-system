@@ -1,18 +1,24 @@
-import { addDoc, collection, getDocs, serverTimestamp, deleteDoc, doc, query, where } from "firebase/firestore";
+import { addDoc, collection, getDocs, serverTimestamp, deleteDoc, doc, query, where, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 export interface Product {
     id: string;
     name: string;
-    company: string;
     category: string;
+    company: string;
     stock: number;
     minStock: number;
     price: number;
     lastRestocked: string;
     createdAt: string;
     status?: string;
+    clarification?: {
+      identifier: string;  // either color or size
+      quantity: number;
+    }[];
   }
+  
+  
 
 export const addProduct = async (productData: Omit<Product, 'id' | 'status'>) => {
   try {
@@ -102,3 +108,45 @@ export const getProductsByCategory = async (categoryId: string): Promise<Product
     throw error;
   }
 };
+
+
+export const updateProductStock = async (
+    productId: string,
+    amount: number
+  ): Promise<Product> => {
+    try {
+      const productRef = doc(db, "products", productId);
+  
+      // Fetch the current product data using getDoc()
+      const productSnapshot = await getDoc(productRef);
+      if (!productSnapshot.exists()) {
+        throw new Error("Product does not exist");
+      }
+  
+      const productData = productSnapshot.data() as Product;
+  
+      // Calculate new stock
+      const newStock = (productData.stock || 0) + amount;
+  
+      // Update the product stock and lastRestocked timestamp
+      await updateDoc(productRef, {
+        stock: newStock,
+        lastRestocked: serverTimestamp(),
+        status: newStock < productData.minStock ? "Low Stock" : "In Stock",
+      });
+  
+      return {
+        ...productData,
+        id: productId,
+        stock: newStock,
+        lastRestocked: new Date().toISOString(),
+        status: newStock < productData.minStock ? "Low Stock" : "In Stock",
+      };
+    } catch (error) {
+      console.error("Error updating product stock:", error);
+      throw error;
+    }
+  };
+
+  
+

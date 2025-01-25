@@ -1,19 +1,12 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MainNav } from "@/components/main-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { DollarSign, Package, ShoppingBag, TrendingUp, Users } from "lucide-react";
 
 export default function DashboardPage() {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 items-center justify-between">
-          <MainNav />
-          <ThemeToggle />
-        </div>
-      </header>
       <main className="flex-1 container py-6">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>
